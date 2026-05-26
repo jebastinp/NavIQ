@@ -10,12 +10,10 @@ services:
     rootDir: backend
     plan: free
     region: oregon
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: if [ -f requirements.txt ]; then pip install -r requirements.txt; else cd backend && pip install -r requirements.txt; fi
+    startCommand: if [ -f main.py ]; then uvicorn main:app --host 0.0.0.0 --port $PORT; else cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT; fi
     healthCheckPath: /health
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_ANON_KEY
