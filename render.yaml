@@ -1,0 +1,30 @@
+# Render blueprint — auto-deploys the backend from GitHub.
+# Push your code to GitHub, then go to render.com → "New" → "Blueprint" → connect repo.
+# Render will detect this file and create the service.
+#
+# After deploy, set the env vars listed under `envVars` in the Render dashboard.
+services:
+  - type: web
+    name: naviq-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: ORS_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
